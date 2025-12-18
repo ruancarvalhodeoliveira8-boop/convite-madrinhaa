@@ -20,7 +20,6 @@
       min-height: 100vh; overflow: hidden;
     }
 
-    /* Tela de Início para garantir áudio */
     #overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: var(--bg-gradient);
@@ -69,16 +68,16 @@
 
   <div id="overlay">
     <h1 style="margin-bottom: 30px;">Para vocês...</h1>
-    <button class="btn-start" onclick="começar()">Abrir Convite ✉️</button>
+    <button class="btn-start" onclick="iniciar()">Abrir Convite ✉️</button>
   </div>
 
   <div class="card">
     <video id="videoMain" playsinline>
-      <source src="video2.mp4" type="video/mp4">
+      <source id="videoSource" src="video2.mp4" type="video/mp4">
     </video>
 
     <h1 id="titulo">Bem-vindos</h1>
-    <p id="subtitulo">ASSISTA COM SOM</p>
+    <p id="subtitulo">ASSISTAM ATÉ AO FIM</p>
 
     <div class="buttons" id="areaBotoes">
       <button class="sim" onclick="aceitar()">SIM 💚</button>
@@ -96,7 +95,8 @@
     const titulo = document.getElementById("titulo");
     const subtitulo = document.getElementById("subtitulo");
 
-    function começar() {
+    // Função para iniciar o primeiro vídeo
+    function iniciar() {
       document.getElementById("overlay").style.opacity = "0";
       setTimeout(() => {
         document.getElementById("overlay").style.display = "none";
@@ -104,17 +104,18 @@
       }, 800);
     }
 
+    // Lógica de troca de vídeos
     video.onended = () => {
-      // Se terminou o video2, passa direto para o video3
-      if (video.src.includes("video2.mp4")) {
+      // Se acabou o video2, carrega e toca o video3 imediatamente
+      if (video.src.includes("video2.mp4") || video.currentSrc.includes("video2.mp4")) {
         video.src = "video3.mp4";
         video.load();
         video.play();
-        titulo.innerText = "Vocês aceitam?"; // Mensagem muda quando o v3 começa
-        subtitulo.innerText = "ESPERAMOS POR VOCÊS";
+        titulo.innerText = "Vocês aceitam?";
+        subtitulo.innerText = "UMA RESPOSTA ESPECIAL";
       } 
-      // Se terminou o video3, aí sim aparecem os botões SIM e NÃO
-      else if (video.src.includes("video3.mp4")) {
+      // Se acabou o video3, mostra os botões
+      else if (video.src.includes("video3.mp4") || video.currentSrc.includes("video3.mp4")) {
         areaBotoes.style.display = "flex";
         subtitulo.innerText = "ESCOLHAM UMA OPÇÃO";
       }
@@ -123,8 +124,8 @@
     function aceitar() {
       areaBotoes.style.display = "none";
       titulo.innerText = "Nossa História 💚";
-      subtitulo.innerText = "PARA SEMPRE";
-      // Após o SIM, carrega o video1
+      subtitulo.innerText = "FEITO COM AMOR";
+      // Após o SIM, toca o video1
       video.src = "video1.mp4";
       video.load();
       video.play();
@@ -134,6 +135,7 @@
       areaBotoes.style.display = "none";
       document.getElementById("msgNao").classList.remove("hidden");
       titulo.innerText = "Poxa... 🥺";
+      subtitulo.style.display = "none";
     }
   </script>
 </body>
