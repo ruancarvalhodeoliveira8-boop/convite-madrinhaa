@@ -2,88 +2,144 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Convite Especial 💚</title>
+  <title>Um Convite Especial 💚</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --primary-color: #4f8f7a;
+      --bg-gradient: linear-gradient(135deg, #f3f7f5 0%, #ffffff 100%);
+      --text-color: #2f5d50;
+    }
+
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(180deg, #e6f3ef, #ffffff);
-      font-family: Arial, sans-serif;
+      background: var(--bg-gradient);
+      font-family: 'Montserrat', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Detalhes decorativos no fundo */
+    body::before {
+      content: "🍃"; position: absolute; top: 10%; left: 5%; font-size: 2rem; opacity: 0.2; animation: float 6s infinite;
+    }
+    body::after {
+      content: "🌸"; position: absolute; bottom: 10%; right: 5%; font-size: 2rem; opacity: 0.2; animation: float 8s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
     }
 
     .card {
-      width: 100%;
-      max-width: 420px;
-      background: #ffffff;
-      border-radius: 18px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
       overflow: hidden;
       text-align: center;
+      border: 1px solid rgba(79, 143, 122, 0.1);
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .video-container {
+      position: relative;
+      background: #000;
+      line-height: 0;
     }
 
     video {
       width: 100%;
-      display: block;
-      background: black;
+      border-bottom: 4px solid var(--primary-color);
     }
 
     h1 {
-      color: #2f5d50;
-      font-size: 22px;
-      margin: 20px 10px 10px;
+      font-family: 'Great Vibes', cursive;
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      margin: 25px 15px 10px;
+      font-weight: normal;
+    }
+
+    p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
     }
 
     .buttons {
       display: none;
       gap: 15px;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      padding: 0 20px;
     }
 
     button {
-      padding: 12px 26px;
-      font-size: 16px;
-      border-radius: 25px;
+      padding: 14px 30px;
+      font-size: 14px;
+      border-radius: 50px;
       border: none;
       cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
     }
 
     .sim {
-      background: #4f8f7a;
+      background: var(--primary-color);
       color: white;
+      box-shadow: 0 4px 15px rgba(79, 143, 122, 0.3);
+    }
+
+    .sim:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(79, 143, 122, 0.4);
     }
 
     .nao {
-      background: #cccccc;
-      color: #444;
+      background: #f0f0f0;
+      color: #888;
     }
 
     .msg-nao {
       display: none;
-      color: #555;
-      margin-bottom: 20px;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      font-style: italic;
     }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <video id="video" controls>
-      <source src="video1.mp4" type="video/mp4">
-      Seu navegador não suporta vídeo.
-    </video>
+    <div class="video-container">
+      <video id="video" playsinline>
+        <source src="video1.mp4" type="video/mp4">
+      </video>
+    </div>
 
-    <h1 id="titulo">Posso te fazer uma pergunta especial? 💍</h1>
+    <h1 id="titulo">Uma surpresa...</h1>
+    <p id="subtitulo">ASSISTA ATÉ O FINAL</p>
 
     <div class="buttons" id="botoes">
-      <button class="sim" onclick="sim()">SIM 💚</button>
-      <button class="nao" onclick="nao()">NÃO</button>
+      <button class="sim" onclick="sim()">Sim, aceito! 💍</button>
+      <button class="nao" onclick="nao()">Não</button>
     </div>
 
     <div class="msg-nao" id="msgNao">
@@ -96,24 +152,34 @@
     const video = document.getElementById("video");
     const botoes = document.getElementById("botoes");
     const titulo = document.getElementById("titulo");
+    const subtitulo = document.getElementById("subtitulo");
     const msgNao = document.getElementById("msgNao");
 
-    // Mostra os botões quando o primeiro vídeo (video1) termina
+    // Inicia o vídeo ao carregar (mutado para garantir autoplay em alguns browsers)
+    window.addEventListener('load', () => {
+      video.play().catch(() => {
+        subtitulo.innerText = "CLIQUE NO VÍDEO PARA COMEÇAR";
+      });
+    });
+
     video.onended = () => {
-      // Só mostra os botões se ainda estiver no primeiro vídeo
-      if (video.src.includes("video1.mp4")) {
-          botoes.style.display = "flex";
+      if (video.src.includes("video1.mp4") && !msgNao.style.display === "block") {
+        botoes.style.display = "flex";
+        titulo.innerText = "Pergunta Especial";
+        subtitulo.innerText = "ESCOLHA UMA OPÇÃO ABAIXO";
+      } else if (video.src.includes("video3.mp4")) {
+        video.src = "video1.mp4";
+        video.load();
+        titulo.innerText = "Nossa História";
+        subtitulo.innerText = "PARA SEMPRE EM NOSSOS CORAÇÕES";
       }
     };
 
     function sim() {
       botoes.style.display = "none";
       msgNao.style.display = "none";
-      
-      // Atualiza o texto conforme solicitado
-      titulo.innerText = "Vocês aceitam? 💚💍";
-      
-      // Troca para o video3.mp4
+      titulo.innerText = "Vocês aceitam?";
+      subtitulo.innerText = "ESTAMOS MUITO FELIZES!";
       video.src = "video3.mp4";
       video.load();
       video.play();
@@ -122,8 +188,10 @@
     function nao() {
       botoes.style.display = "none";
       msgNao.style.display = "block";
-      titulo.innerText = "Poxa... 🥺";
+      titulo.innerText = "Poxa...";
+      subtitulo.style.display = "none";
     }
   </script>
 </body>
 </html>
+    
