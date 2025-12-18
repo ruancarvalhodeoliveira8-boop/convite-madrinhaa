@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Um Convite Especial 💚</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convite Especial 💚</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
@@ -12,12 +12,13 @@
       --bg-gradient: linear-gradient(135deg, #f3f7f5 0%, #ffffff 100%);
     }
 
-    body {
+    /* TELA CHEIA */
+    html, body {
       margin: 0; padding: 0;
+      width: 100%; height: 100%;
       background: var(--bg-gradient);
       font-family: 'Montserrat', sans-serif;
-      display: flex; justify-content: center; align-items: center;
-      min-height: 100vh; overflow: hidden;
+      overflow: hidden; /* Impede scroll */
     }
 
     #overlay {
@@ -34,18 +35,18 @@
       box-shadow: 0 10px 20px rgba(79, 143, 122, 0.3);
     }
 
+    /* CARD EM TELA CHEIA */
     .card {
-      width: 90%; max-width: 400px; background: white;
-      border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-      overflow: hidden; text-align: center; position: relative;
+      width: 100vw; height: 100vh;
+      background: white;
+      display: flex; flex-direction: column;
+      text-align: center; position: relative;
     }
 
-    /* Container para os vídeos ficarem um em cima do outro */
     .video-wrapper {
       position: relative;
       width: 100%;
-      height: 0;
-      padding-bottom: 177.77%; /* Proporção 16:9 vertical, ajuste se necessário */
+      flex-grow: 1; /* Faz o vídeo ocupar o espaço máximo */
       background: #000;
     }
 
@@ -53,34 +54,45 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
+      object-fit: cover; /* Garante que o vídeo preencha a tela */
     }
 
     .hidden-video { opacity: 0; pointer-events: none; }
 
-    h1 {
-      font-family: 'Great Vibes', cursive; color: var(--primary-color);
-      font-size: 2.3rem; margin: 15px 10px 5px;
+    .content-overlay {
+      position: absolute;
+      bottom: 0; width: 100%;
+      background: linear-gradient(transparent, rgba(255,255,255,0.9) 30%);
+      padding: 20px 0 40px;
+      z-index: 10;
     }
 
-    p { color: #888; font-size: 0.8rem; margin-bottom: 15px; }
+    h1 {
+      font-family: 'Great Vibes', cursive; color: var(--primary-color);
+      font-size: 2.5rem; margin: 0;
+    }
+
+    p { color: #666; font-size: 0.9rem; margin: 5px 0 15px; letter-spacing: 1px; }
 
     .buttons {
-      display: none; gap: 10px; justify-content: center;
-      margin-bottom: 20px; padding: 0 20px;
+      display: none; gap: 15px; justify-content: center;
+      padding: 0 20px;
     }
 
     button {
-      padding: 12px 25px; border-radius: 50px; border: none;
-      cursor: pointer; font-weight: 600; transition: 0.3s;
+      padding: 15px 35px; border-radius: 50px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 1rem; transition: 0.3s;
     }
 
-    .sim { background: var(--primary-color); color: white; }
+    .sim { background: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
     .nao { background: #eee; color: #777; }
   </style>
 </head>
 <body>
+
+  <audio id="musicaFundo" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
 
   <div id="overlay">
     <h1 style="margin-bottom: 30px;">Para vocês...</h1>
@@ -89,37 +101,42 @@
 
   <div class="card">
     <div class="video-wrapper">
-      <video id="vid1" playsinline preload="auto"></video>
-      <video id="vid2" class="hidden-video" playsinline preload="auto"></video>
+      <video id="vid1" playsinline muted preload="auto"></video>
+      <video id="vid2" class="hidden-video" playsinline muted preload="auto"></video>
     </div>
 
-    <h1 id="titulo">Bem-vindos</h1>
-    <p id="subtitulo">ASSISTAM ATÉ O FINAL</p>
+    <div class="content-overlay">
+      <h1 id="titulo">Bem-vindos</h1>
+      <p id="subtitulo">ASSISTAM COM CARINHO</p>
 
-    <div class="buttons" id="areaBotoes">
-      <button class="sim" onclick="aceitar()">SIM 💚</button>
-      <button class="nao" onclick="recusar()">NÃO</button>
+      <div class="buttons" id="areaBotoes">
+        <button class="sim" onclick="aceitar()">SIM 💚</button>
+        <button class="nao" onclick="recusar()">NÃO</button>
+      </div>
     </div>
   </div>
 
   <script>
     const v1 = document.getElementById("vid1");
     const v2 = document.getElementById("vid2");
+    const musica = document.getElementById("musicaFundo");
     const titulo = document.getElementById("titulo");
     const areaBotoes = document.getElementById("areaBotoes");
 
-    let status = "v2_rodando"; // Começamos carregando o video2
+    let status = "v2_rodando";
 
     function iniciar() {
       document.getElementById("overlay").style.opacity = "0";
+      
+      // Toca a música de fundo
+      musica.play();
+
       setTimeout(() => {
         document.getElementById("overlay").style.display = "none";
         
-        // Configura e toca o vídeo 2
         v1.src = "video2.mp4";
         v1.play();
         
-        // Pré-carrega o vídeo 3 no fundo para não ter atraso
         v2.src = "video3.mp4";
         v2.load();
       }, 500);
@@ -127,7 +144,6 @@
 
     v1.onended = () => {
       if (status === "v2_rodando") {
-        // Troca instantânea para o vídeo 3
         v1.classList.add("hidden-video");
         v2.classList.remove("hidden-video");
         v2.play();
@@ -138,7 +154,6 @@
 
     v2.onended = () => {
       if (status === "v3_rodando") {
-        // Quando o 3 acaba, mostra botões
         areaBotoes.style.display = "flex";
       }
     };
@@ -147,11 +162,9 @@
       areaBotoes.style.display = "none";
       titulo.innerText = "Nossa História 💚";
       
-      // Prepara o video1 no player que está escondido (v1)
       v1.src = "video1.mp4";
       v1.load();
       
-      // Troca instantânea
       v2.classList.add("hidden-video");
       v1.classList.remove("hidden-video");
       v1.play();
