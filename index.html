@@ -88,7 +88,7 @@
 
     <div class="msg-nao" id="msgNao">
       Tudo bem 💚<br>
-      Você continua sendo muito especial pra nós.
+      Vocês continuam sendo muito especiais pra nós.
     </div>
   </div>
 
@@ -98,15 +98,23 @@
     const titulo = document.getElementById("titulo");
     const msgNao = document.getElementById("msgNao");
 
+    // Mostra os botões quando o primeiro vídeo (video1) termina
     video.onended = () => {
-      botoes.style.display = "flex";
+      // Só mostra os botões se ainda estiver no primeiro vídeo
+      if (video.src.includes("video1.mp4")) {
+          botoes.style.display = "flex";
+      }
     };
 
     function sim() {
       botoes.style.display = "none";
       msgNao.style.display = "none";
-      titulo.innerText = "Você aceita ser minha madrinha de casamento? 💚💍";
-      video.src = "video2.mp4";
+      
+      // Atualiza o texto conforme solicitado
+      titulo.innerText = "Vocês aceitam? 💚💍";
+      
+      // Troca para o video3.mp4
+      video.src = "video3.mp4";
       video.load();
       video.play();
     }
@@ -114,6 +122,7 @@
     function nao() {
       botoes.style.display = "none";
       msgNao.style.display = "block";
+      titulo.innerText = "Poxa... 🥺";
     }
   </script>
 </body>
