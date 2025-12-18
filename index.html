@@ -4,194 +4,144 @@
   <meta charset="UTF-8">
   <title>Um Convite Especial 💚</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --primary-color: #4f8f7a;
       --bg-gradient: linear-gradient(135deg, #f3f7f5 0%, #ffffff 100%);
-      --text-color: #2f5d50;
     }
 
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       background: var(--bg-gradient);
       font-family: 'Montserrat', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; overflow: hidden;
     }
 
-    /* Detalhes decorativos no fundo */
-    body::before {
-      content: "🍃"; position: absolute; top: 10%; left: 5%; font-size: 2rem; opacity: 0.2; animation: float 6s infinite;
-    }
-    body::after {
-      content: "🌸"; position: absolute; bottom: 10%; right: 5%; font-size: 2rem; opacity: 0.2; animation: float 8s infinite;
+    #overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-gradient);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 100; transition: opacity 0.8s ease;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+    .btn-start {
+      padding: 20px 40px; font-family: 'Great Vibes', cursive;
+      font-size: 2.2rem; background: var(--primary-color); color: white;
+      border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 10px 20px rgba(79, 143, 122, 0.3); transition: 0.3s;
     }
 
     .card {
-      width: 90%;
-      max-width: 400px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 30px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-      overflow: hidden;
-      text-align: center;
-      border: 1px solid rgba(79, 143, 122, 0.1);
-      animation: fadeIn 1.5s ease-out;
+      width: 90%; max-width: 400px; background: white;
+      border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+      overflow: hidden; text-align: center;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .video-container {
-      position: relative;
-      background: #000;
-      line-height: 0;
-    }
-
-    video {
-      width: 100%;
-      border-bottom: 4px solid var(--primary-color);
-    }
+    video { width: 100%; display: block; background: #000; }
 
     h1 {
-      font-family: 'Great Vibes', cursive;
-      color: var(--primary-color);
-      font-size: 2.5rem;
-      margin: 25px 15px 10px;
-      font-weight: normal;
+      font-family: 'Great Vibes', cursive; color: var(--primary-color);
+      font-size: 2.3rem; margin: 20px 10px 5px; min-height: 45px;
     }
 
-    p {
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-    }
+    p { color: #888; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 20px; }
 
     .buttons {
-      display: none;
-      gap: 15px;
-      justify-content: center;
-      margin-bottom: 30px;
-      padding: 0 20px;
+      display: none; gap: 15px; justify-content: center;
+      margin-bottom: 25px; padding: 0 20px;
     }
 
     button {
-      padding: 14px 30px;
-      font-size: 14px;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
+      padding: 12px 25px; font-size: 14px; border-radius: 50px;
+      border: none; cursor: pointer; font-weight: 600; transition: 0.3s;
     }
 
-    .sim {
-      background: var(--primary-color);
-      color: white;
-      box-shadow: 0 4px 15px rgba(79, 143, 122, 0.3);
-    }
-
-    .sim:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(79, 143, 122, 0.4);
-    }
-
-    .nao {
-      background: #f0f0f0;
-      color: #888;
-    }
-
-    .msg-nao {
-      display: none;
-      color: var(--primary-color);
-      margin-bottom: 30px;
-      font-style: italic;
-    }
+    .sim { background: var(--primary-color); color: white; }
+    .nao { background: #eee; color: #777; }
+    .hidden { display: none; }
   </style>
 </head>
-
 <body>
+
+  <div id="overlay">
+    <h1 style="margin-bottom: 30px;">Para vocês...</h1>
+    <button class="btn-start" onclick="começar()">Abrir Convite ✉️</button>
+  </div>
+
   <div class="card">
-    <div class="video-container">
-      <video id="video" playsinline>
-        <source src="video1.mp4" type="video/mp4">
-      </video>
+    <video id="videoMain" playsinline>
+      <source src="video2.mp4" type="video/mp4">
+    </video>
+
+    <h1 id="titulo">Nossa História</h1>
+    <p id="subtitulo">ASSISTA COM SOM</p>
+
+    <div class="buttons" id="areaBotoes">
+      <button class="sim" onclick="aceitar()">SIM 💚</button>
+      <button class="nao" onclick="recusar()">NÃO</button>
     </div>
 
-    <h1 id="titulo">Uma surpresa...</h1>
-    <p id="subtitulo">ASSISTA ATÉ O FINAL</p>
-
-    <div class="buttons" id="botoes">
-      <button class="sim" onclick="sim()">Sim, aceito! 💍</button>
-      <button class="nao" onclick="nao()">Não</button>
-    </div>
-
-    <div class="msg-nao" id="msgNao">
-      Tudo bem 💚<br>
-      Vocês continuam sendo muito especiais pra nós.
+    <div id="msgNao" class="hidden" style="margin-bottom: 25px; color: #666;">
+      Tudo bem 💚 Vocês são especiais!
     </div>
   </div>
 
   <script>
-    const video = document.getElementById("video");
-    const botoes = document.getElementById("botoes");
+    const video = document.getElementById("videoMain");
+    const areaBotoes = document.getElementById("areaBotoes");
     const titulo = document.getElementById("titulo");
     const subtitulo = document.getElementById("subtitulo");
-    const msgNao = document.getElementById("msgNao");
 
-    // Inicia o vídeo ao carregar (mutado para garantir autoplay em alguns browsers)
-    window.addEventListener('load', () => {
-      video.play().catch(() => {
-        subtitulo.innerText = "CLIQUE NO VÍDEO PARA COMEÇAR";
-      });
-    });
+    function começar() {
+      document.getElementById("overlay").style.opacity = "0";
+      setTimeout(() => {
+        document.getElementById("overlay").style.display = "none";
+        video.play();
+      }, 800);
+    }
 
-    video.onended = () => {
-      if (video.src.includes("video1.mp4") && !msgNao.style.display === "block") {
-        botoes.style.display = "flex";
-        titulo.innerText = "Pergunta Especial";
-        subtitulo.innerText = "ESCOLHA UMA OPÇÃO ABAIXO";
-      } else if (video.src.includes("video3.mp4")) {
-        video.src = "video1.mp4";
-        video.load();
-        titulo.innerText = "Nossa História";
-        subtitulo.innerText = "PARA SEMPRE EM NOSSOS CORAÇÕES";
+    // Monitora o tempo do vídeo para mudar a frase 1 segundo antes de acabar
+    video.ontimeupdate = () => {
+      if (video.src.includes("video3.mp4")) {
+        let tempoRestante = video.duration - video.currentTime;
+        if (tempoRestante <= 1 && tempoRestante > 0) {
+          titulo.innerText = "Vocês aceitam?";
+        }
       }
     };
 
-    function sim() {
-      botoes.style.display = "none";
-      msgNao.style.display = "none";
-      titulo.innerText = "Vocês aceitam?";
-      subtitulo.innerText = "ESTAMOS MUITO FELIZES!";
+    video.onended = () => {
+      // Quando o video2 acaba, mostra botões
+      if (video.src.includes("video2.mp4")) {
+        areaBotoes.style.display = "flex";
+        titulo.innerText = "Pergunta Especial";
+      } 
+      // Quando o video3 acaba, vai para o video1 e para
+      else if (video.src.includes("video3.mp4")) {
+        video.src = "video1.mp4";
+        video.load();
+        titulo.innerText = "Nossa História 💚";
+        subtitulo.innerText = "FEITO COM AMOR";
+      }
+    };
+
+    function aceitar() {
+      areaBotoes.style.display = "none";
+      titulo.innerText = ""; // Fica limpo até faltar 1 seg para acabar
+      subtitulo.innerText = "ASSISTA ATÉ O FINAL";
       video.src = "video3.mp4";
       video.load();
       video.play();
     }
 
-    function nao() {
-      botoes.style.display = "none";
-      msgNao.style.display = "block";
-      titulo.innerText = "Poxa...";
-      subtitulo.style.display = "none";
+    function recusar() {
+      areaBotoes.style.display = "none";
+      document.getElementById("msgNao").classList.remove("hidden");
+      titulo.innerText = "Poxa... 🥺";
     }
   </script>
 </body>
 </html>
-    
